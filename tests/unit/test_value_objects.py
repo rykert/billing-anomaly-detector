@@ -1,5 +1,6 @@
-import pytest
 from decimal import Decimal
+
+import pytest
 
 from billing_anomaly_detector.domain.value_objects import AnomalyScore, Money
 
