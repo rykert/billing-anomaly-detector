@@ -15,10 +15,17 @@ class InvoiceRepository(ABC):
     async def get(self, invoice_id: UUID) -> Invoice | None: ...
 
     @abstractmethod
+    async def update_embedding(
+        self, invoice_id: UUID, embedding: list[float]
+    ) -> None: ...
+
+    @abstractmethod
     async def list_unembedded(self, limit: int = 500) -> list[Invoice]: ...
 
     @abstractmethod
-    async def list_all_embeddings(self) -> list[tuple[UUID, list[float]]]: ...
+    async def list_all_embeddings(
+        self,
+    ) -> list[tuple[UUID, list[float]]]: ...
 
 
 class AnomalyRepository(ABC):
@@ -31,7 +38,9 @@ class AnomalyRepository(ABC):
     ) -> list[DetectionResult]: ...
 
     @abstractmethod
-    async def get_by_invoice(self, invoice_id: UUID) -> DetectionResult | None: ...
+    async def get_by_invoice(
+        self, invoice_id: UUID
+    ) -> DetectionResult | None: ...
 
 
 class EmbeddingPort(ABC):
@@ -45,5 +54,8 @@ class EmbeddingPort(ABC):
 class ExplanationPort(ABC):
     @abstractmethod
     async def explain(
-        self, invoice: Invoice, score: AnomalyScore, neighbors: list[Invoice]
+        self,
+        invoice: Invoice,
+        score: AnomalyScore,
+        neighbors: list[Invoice],
     ) -> str: ...

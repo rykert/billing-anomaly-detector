@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from billing_anomaly_detector.domain.entities import Invoice
@@ -22,6 +22,17 @@ class SqlAlchemyInvoiceRepository(InvoiceRepository):
         model = await self._session.get(InvoiceModel, invoice_id)
         return self._to_domain(model) if model else None
 
+    async def update_embedding(
+        self, invoice_id: UUID, embedding: list[float]
+    ) -> None:
+        stmt = (
+            update(InvoiceModel)
+            .where(InvoiceModel.id == invoice_id)
+            .values(embedding=embedding)
+        )
+        await self._session.execute(stmt)
+        await self._session.flush()
+
     async def list_unembedded(self, limit: int = 500) -> list[Invoice]:
         stmt = (
             select(InvoiceModel)
@@ -31,7 +42,9 @@ class SqlAlchemyInvoiceRepository(InvoiceRepository):
         result = await self._session.execute(stmt)
         return [self._to_domain(m) for m in result.scalars().all()]
 
-    async def list_all_embeddings(self) -> list[tuple[UUID, list[float]]]:
+    async def list_all_embeddings(
+        self,
+    ) -> list[tuple[UUID, list[float]]]:
         stmt = select(InvoiceModel.id, InvoiceModel.embedding).where(
             InvoiceModel.embedding.isnot(None)
         )
@@ -63,5 +76,7 @@ class SqlAlchemyInvoiceRepository(InvoiceRepository):
             billed_amount=Money(model.billed_amount, model.billed_currency),
             allowed_amount=Money(model.allowed_amount, model.allowed_currency),
             service_date=model.service_date,
-            embedding=list(model.embedding) if model.embedding is not None else None,
+            embedding=(
+                list(model.embedding) if model.embedding is not None else None
+            ),
         )
