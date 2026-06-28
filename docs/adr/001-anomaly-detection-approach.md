@@ -51,3 +51,26 @@ chain (GPT-4o) can reason over.
 |---|---|
 | Rules-based thresholds | Doesn't generalize, no continuous score |
 | Isolation Forest (v1) | Requires a labeled-enough feature set and training step before any detection is possible; deferred to Phase 2 once v1's eval baseline exists to compare against |
+
+## Post-implementation finding — threshold calibration
+
+After running against the actual Azure embeddings, the cosine distance
+distribution was tighter than expected:
+
+- Max score: 0.0483
+- p99 score: 0.0324
+- Mean score: 0.0196
+
+The original threshold of 0.80 (a common default for cosine distance)
+produced zero detections. Calibrated to 0.030 (just below p99) to flag
+the top 1% of invoices.
+
+**Root cause:** `text-embedding-3-small` treats all billing claims as
+semantically similar — they share the same structural template (code,
+NPI, amounts, date). The numerical anomaly signal (a 9x ratio vs 1.5x)
+doesn't produce a large directional shift in embedding space. This
+confirms the ADR-001 prediction that cosine similarity alone has a
+ceiling on structured tabular billing data, and validates the Isolation
+Forest upgrade planned for Phase 2 — classical ML on raw features will
+catch ratio-based anomalies directly without going through the embedding
+representation.
