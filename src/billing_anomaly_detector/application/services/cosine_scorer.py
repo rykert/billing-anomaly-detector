@@ -49,3 +49,27 @@ def score_embeddings(
         results.append((invoice_id, score))
 
     return sorted(results, key=lambda pair: pair[1].value, reverse=True)
+
+
+def find_neighbors(
+    target_id: UUID,
+    target_embedding: list[float],
+    all_embeddings: list[tuple[UUID, list[float]]],
+    limit: int = 3,
+) -> list[UUID]:
+    """
+    Find the IDs of the most similar invoices to the target.
+    Excludes the target itself. Returns limit nearest neighbors,
+    sorted ascending by cosine distance (closest first).
+    These become the comparison claims in the LLM explanation prompt.
+    """
+    target_vec = np.array(target_embedding, dtype=np.float32)
+    distances: list[tuple[UUID, float]] = []
+    for invoice_id, embedding in all_embeddings:
+        if invoice_id == target_id:
+            continue
+        vec = np.array(embedding, dtype=np.float32)
+        dist = cosine_distance(target_vec, vec)
+        distances.append((invoice_id, dist))
+    distances.sort(key=lambda pair: pair[1])
+    return [invoice_id for invoice_id, _ in distances[:limit]]

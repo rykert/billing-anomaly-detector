@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     azure_openai_api_key: str = ""
     azure_openai_endpoint: str = ""
     azure_openai_deployment_chat: str = "gpt-5"
+    azure_openai_api_version: str = "2025-04-01-preview"
     azure_openai_deployment_embedding: str = "text-embedding-3-small"
 
     use_local_models: bool = True

@@ -33,6 +33,11 @@ class AnomalyRepository(ABC):
     async def add(self, result: DetectionResult) -> None: ...
 
     @abstractmethod
+    async def update_explanation(
+        self, invoice_id: UUID, explanation: str
+    ) -> None: ...
+
+    @abstractmethod
     async def list_above_threshold(
         self, threshold: float, limit: int = 20
     ) -> list[DetectionResult]: ...

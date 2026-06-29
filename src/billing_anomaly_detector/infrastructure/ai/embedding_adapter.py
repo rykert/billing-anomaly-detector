@@ -12,6 +12,7 @@ class AzureOpenAIEmbeddingAdapter(EmbeddingPort):
             azure_endpoint=settings.azure_openai_endpoint,
             api_key=SecretStr(settings.azure_openai_api_key),
             azure_deployment=settings.azure_openai_deployment_embedding,
+            api_version=settings.azure_openai_api_version,
         )
 
     async def embed(self, text: str) -> list[float]:

@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from billing_anomaly_detector.domain.entities import DetectionResult
@@ -18,6 +18,17 @@ class SqlAlchemyAnomalyRepository(AnomalyRepository):
         self._session.add(model)
         await self._session.flush()
 
+    async def update_explanation(
+        self, invoice_id: UUID, explanation: str
+    ) -> None:
+        stmt = (
+            update(AnomalyResultModel)
+            .where(AnomalyResultModel.invoice_id == invoice_id)
+            .values(explanation=explanation)
+        )
+        await self._session.execute(stmt)
+        await self._session.flush()
+
     async def list_above_threshold(
         self, threshold: float, limit: int = 20
     ) -> list[DetectionResult]:
@@ -30,7 +41,9 @@ class SqlAlchemyAnomalyRepository(AnomalyRepository):
         result = await self._session.execute(stmt)
         return [self._to_domain(m) for m in result.scalars().all()]
 
-    async def get_by_invoice(self, invoice_id: UUID) -> DetectionResult | None:
+    async def get_by_invoice(
+        self, invoice_id: UUID
+    ) -> DetectionResult | None:
         stmt = select(AnomalyResultModel).where(
             AnomalyResultModel.invoice_id == invoice_id
         )
