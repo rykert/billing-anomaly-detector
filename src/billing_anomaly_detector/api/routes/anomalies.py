@@ -1,3 +1,4 @@
+from typing import cast
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -92,4 +93,8 @@ async def explain_anomaly(
             "Ensure the invoice exists and detection has been run.",
         )
 
-    return ExplainResponse(**result)
+    return ExplainResponse(
+        invoice_id=cast(UUID, result["invoice_id"]),
+        score=cast(float, result["score"]),
+        explanation=cast(str, result["explanation"]),
+    )
