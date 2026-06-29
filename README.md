@@ -117,12 +117,12 @@ Threshold calibrated empirically to the p99 of the cosine distance distribution 
 
 | Metric | Score |
 |---|---|
-| Precision | ~0.89 |
-| Recall | ~0.86 |
-| F1 | ~0.87 |
-| True Positives | ~43 / 50 |
-| False Positives | ~5 |
-| False Negatives | ~7 |
+| Precision | ~0.079 |
+| Recall | ~0.200 |
+| F1 | ~0.114 |
+| True Positives | 10 |
+| False Positives | 116 |
+| False Negatives | 40 |
 
 **Key finding (documented in ADR-001):** Cosine similarity on text embeddings has a ceiling on structured billing data — all claims share the same textual template, compressing the distance signal into a narrow 0.01–0.05 range. The embedding approach is most effective for semantic outliers; Isolation Forest on raw numerical features (planned Phase 2) will improve recall on ratio-based anomalies by operating on the billed-to-allowed ratio directly without going through the embedding representation.
 
