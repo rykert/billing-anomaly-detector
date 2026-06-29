@@ -5,22 +5,17 @@ data persists between tests.
 """
 
 import uuid
-from datetime import date
-from decimal import Decimal
 
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from billing_anomaly_detector.domain.value_objects import AnomalyScore, ClaimCode, MemberId, Money
-from billing_anomaly_detector.domain.entities import Invoice
-from billing_anomaly_detector.infrastructure.persistence.invoice_repository import (
-    SqlAlchemyInvoiceRepository,
-)
 from billing_anomaly_detector.infrastructure.persistence.anomaly_repository import (
     SqlAlchemyAnomalyRepository,
 )
-
-from tests.conftest import make_invoice, make_detection_result
+from billing_anomaly_detector.infrastructure.persistence.invoice_repository import (
+    SqlAlchemyInvoiceRepository,
+)
+from tests.conftest import make_detection_result, make_invoice
 
 
 @pytest.mark.integration

@@ -1,6 +1,6 @@
-from billing_anomaly_detector.application.services.invoice_text import invoice_to_text
-
 from tests.conftest import make_invoice
+
+from billing_anomaly_detector.application.services.invoice_text import invoice_to_text
 
 
 class TestInvoiceToText:

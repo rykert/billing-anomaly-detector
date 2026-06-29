@@ -8,8 +8,6 @@ import uuid
 from datetime import date
 from decimal import Decimal
 
-import pytest
-
 from billing_anomaly_detector.domain.entities import DetectionResult, Invoice
 from billing_anomaly_detector.domain.value_objects import (
     AnomalyScore,

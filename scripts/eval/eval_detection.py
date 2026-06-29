@@ -73,8 +73,10 @@ async def run_eval() -> None:
         print("  BILLING ANOMALY DETECTOR — EVALUATION RESULTS")
         print(f"{'='*54}")
         print(f"\n  Total invoices:              {len(invoice_rows):>6}")
-        print(f"  Ground truth anomalies:      {len(ground_truth):>6}  (ratio > {GROUND_TRUTH_RATIO}x)")
-        print(f"  Detected anomalies:          {len(detected):>6}  (score >= {settings.anomaly_threshold})")
+        print(f"  Ground truth anomalies:      {len(ground_truth):>6}  "
+              f"(ratio > {GROUND_TRUTH_RATIO}x)")
+        print(f"  Detected anomalies:          {len(detected):>6}  "
+              f"(score >= {settings.anomaly_threshold})")
         print(f"\n  True Positives:              {tp:>6}  (correctly flagged)")
         print(f"  False Positives:             {fp:>6}  (normal claims flagged)")
         print(f"  False Negatives:             {fn:>6}  (anomalies missed)")
@@ -86,10 +88,10 @@ async def run_eval() -> None:
 
         if fn > 0:
             print(f"  NOTE: {fn} anomaly/anomalies missed. The cosine similarity")
-            print(f"  approach has a ceiling on structured billing data where")
-            print(f"  all claims look textually similar. Isolation Forest")
-            print(f"  (planned Phase 2) will improve recall on ratio-based")
-            print(f"  anomalies by operating on raw numerical features.")
+            print("  approach has a ceiling on structured billing data where")
+            print("  all claims look textually similar. Isolation Forest")
+            print("  (planned Phase 2) will improve recall on ratio-based")
+            print("  anomalies by operating on raw numerical features.")
             print()
 
     await engine.dispose()

@@ -1,7 +1,7 @@
 import uuid
-from unittest.mock import AsyncMock, call
+from unittest.mock import AsyncMock
 
-import pytest
+from tests.conftest import make_invoice
 
 from billing_anomaly_detector.application.use_cases.detect_anomalies import (
     DetectAnomaliesUseCase,
@@ -14,8 +14,6 @@ from billing_anomaly_detector.domain.ports import (
     EmbeddingPort,
     InvoiceRepository,
 )
-
-from tests.conftest import make_invoice
 
 
 class TestIndexInvoicesUseCase:

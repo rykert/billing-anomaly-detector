@@ -1,9 +1,8 @@
-import uuid
 from decimal import Decimal
 
-from billing_anomaly_detector.domain.value_objects import AnomalyScore
-
 from tests.conftest import make_invoice
+
+from billing_anomaly_detector.domain.value_objects import AnomalyScore
 
 
 class TestInvoice:
